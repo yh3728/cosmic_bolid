@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://b8lyfbry77vts"]
+
+[ext_resource type="Script" path="res://scripts/dumb_ship.gd" id="1_e2qi8"]
+[ext_resource type="Texture2D" uid="uid://b12jswd7m26pm" path="res://sprites/enemy-Sheet.png" id="2_ee5bq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iopee"]
+atlas = ExtResource("2_ee5bq")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nty5p"]
+atlas = ExtResource("2_ee5bq")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27d2x"]
+atlas = ExtResource("2_ee5bq")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kykpi"]
+atlas = ExtResource("2_ee5bq")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tj5ju"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iopee")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nty5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27d2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kykpi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7jab5"]
+radius = 19.0113
+height = 50.0224
+
+[node name="ship" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("1_e2qi8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_tj5ju")
+autoplay = "default"
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(5, 5)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+scale = Vector2(5, 5)
+polygon = PackedVector2Array(-8, 0, 8, 8, 4, 0, 8, -8)
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(-42, 0)
+
+[node name="ShootTimer" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.56499
+shape = SubResource("CapsuleShape2D_7jab5")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
